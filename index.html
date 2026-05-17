@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#22c55e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%2322c55e%22/><text x=%2250%22 y=%2268%22 text-anchor=%22middle%22 font-size=%2256%22 fill=%22white%22>卡</text></svg>">
+  <title>卡路里追踪</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <main id="app">
+    <!-- Tab 1: 拍照分析 -->
+    <section id="tab-analyze" class="tab-page active">
+      <div class="tab-header">
+        <h1>📸 拍照分析</h1>
+        <button class="btn-settings" onclick="openSettings()" aria-label="设置">⚙</button>
+      </div>
+      <div class="tab-content">
+        <div id="camera-area" class="camera-area">
+          <input type="file" id="camera-input" accept="image/*" capture="environment" hidden>
+          <button id="btn-capture" class="btn-capture">
+            <span class="capture-icon">📷</span>
+            <span>点击拍照</span>
+          </button>
+          <img id="photo-preview" class="photo-preview" style="display:none" alt="食物照片">
+        </div>
+        <div class="input-group">
+          <label for="food-desc">食物描述</label>
+          <textarea id="food-desc" placeholder="例如：一碗白米饭（150g）+ 宫保鸡丁（约200g）" rows="3"></textarea>
+        </div>
+        <button id="btn-analyze" class="btn-primary" disabled>🔍 分析营养成分</button>
+        <div id="result-container" class="result-container" style="display:none"></div>
+      </div>
+    </section>
+
+    <!-- Tab 2: 历史记录 -->
+    <section id="tab-history" class="tab-page">
+      <div class="tab-header">
+        <h1>📊 历史记录</h1>
+      </div>
+      <div class="tab-content">
+        <div class="date-picker" id="date-picker">
+          <button id="btn-prev-day" class="btn-icon">◀</button>
+          <button id="btn-date-display" class="btn-date-display"></button>
+          <button id="btn-next-day" class="btn-icon">▶</button>
+        </div>
+        <div id="history-list" class="history-list"></div>
+        <div class="export-area">
+          <button id="btn-export" class="btn-outline">📥 导出数据 (JSON)</button>
+          <button id="btn-import" class="btn-outline" style="margin-top:8px;">📤 导入数据 (JSON)</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tab 3: 个性化建议 -->
+    <section id="tab-advice" class="tab-page">
+      <div class="tab-header">
+        <h1>💡 个性化建议</h1>
+      </div>
+      <div class="tab-content">
+        <button id="btn-generate-advice" class="btn-primary">✨ 生成最新建议</button>
+        <div id="advice-container" class="advice-container" style="display:none"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 底部导航 -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" data-tab="analyze">
+      <span class="nav-icon">📸</span>
+      <span class="nav-label">拍照</span>
+    </button>
+    <button class="nav-item" data-tab="history">
+      <span class="nav-icon">📊</span>
+      <span class="nav-label">记录</span>
+    </button>
+    <button class="nav-item" data-tab="advice">
+      <span class="nav-icon">💡</span>
+      <span class="nav-label">建议</span>
+    </button>
+  </nav>
+
+  <!-- Toast -->
+  <div id="toast" class="toast" style="display:none"></div>
+
+  <!-- Loading -->
+  <div id="loading" class="loading-overlay" style="display:none">
+    <div class="spinner"></div>
+    <p>AI 正在分析中…</p>
+  </div>
+
+  <!-- Settings Modal -->
+  <div id="settings-modal" class="modal" style="display:none">
+    <div class="modal-content">
+      <h2>⚙ 设置</h2>
+      <div class="form-group">
+        <label for="api-key-input">DeepSeek API Key</label>
+        <input type="password" id="api-key-input" placeholder="sk-...">
+      </div>
+      <div class="form-group">
+        <label for="calorie-target">每日热量目标 (kcal)</label>
+        <input type="number" id="calorie-target" value="1800" min="500" max="5000">
+      </div>
+      <div class="form-group">
+        <label for="protein-target">蛋白质目标 (g)</label>
+        <input type="number" id="protein-target" value="60" min="20" max="300">
+      </div>
+      <div class="form-group">
+        <label for="fat-target">脂肪目标 (g)</label>
+        <input type="number" id="fat-target" value="65" min="10" max="300">
+      </div>
+      <div class="form-group">
+        <label for="carbs-target">碳水目标 (g)</label>
+        <input type="number" id="carbs-target" value="180" min="20" max="500">
+      </div>
+      <div class="modal-actions">
+        <button id="btn-save-settings" class="btn-primary">保存</button>
+        <button id="btn-close-settings" class="btn-outline">取消</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
