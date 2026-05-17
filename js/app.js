@@ -44,6 +44,8 @@ async function handleAnalyze() {
   if (!desc) return;
   const apiKey = getApiKey();
   if (!apiKey) { showToast('请先在设置中输入 DeepSeek API Key', 'error'); openSettings(); return; }
+  const btn = document.getElementById('btn-analyze');
+  btn.disabled = true;
   showLoading();
   try {
     const result = await analyzeFood(desc, apiKey);
@@ -52,6 +54,8 @@ async function handleAnalyze() {
     showToast(err.message || '分析失败，请重试', 'error');
   } finally {
     hideLoading();
+    const input = document.getElementById('food-desc');
+    btn.disabled = !input.value.trim();
   }
 }
 
