@@ -1,5 +1,5 @@
 // js/ui.js
-import { addRecord, deleteRecord, getDayTotal, generateId } from './storage.js';
+import { addRecord, deleteRecord, generateId } from './storage.js';
 
 export function showToast(msg, type = 'info') {
   const toast = document.getElementById('toast');
@@ -160,11 +160,15 @@ export function renderAdvice(data) {
 }
 
 function buildTrendsHTML(agg) {
+  if (!agg || !agg.daily_averages || !agg.targets) return '';
+
+  const avg = agg.daily_averages;
+  const tgt = agg.targets;
   const items = [
-    { label: '日均热量', avg: agg.daily_averages.calories, target: agg.targets.calories, unit: 'kcal' },
-    { label: '蛋白质', avg: agg.daily_averages.protein_g, target: agg.targets.protein_g, unit: 'g' },
-    { label: '脂肪', avg: agg.daily_averages.fat_g, target: agg.targets.fat_g, unit: 'g' },
-    { label: '碳水', avg: agg.daily_averages.carbs_g, target: agg.targets.carbs_g, unit: 'g' }
+    { label: '日均热量', avg: avg.calories || 0, target: tgt.calories || 1, unit: 'kcal' },
+    { label: '蛋白质', avg: avg.protein_g || 0, target: tgt.protein_g || 1, unit: 'g' },
+    { label: '脂肪', avg: avg.fat_g || 0, target: tgt.fat_g || 1, unit: 'g' },
+    { label: '碳水', avg: avg.carbs_g || 0, target: tgt.carbs_g || 1, unit: 'g' }
   ];
 
   const rows = items.map(item => {
