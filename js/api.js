@@ -25,14 +25,20 @@ async function callDeepSeek(prompt, apiKey) {
     });
 
     if (!res.ok) {
+      let detail = '';
+      try { const errBody = await res.json(); detail = errBody?.error?.message || ''; } catch {}
       if (res.status === 401) throw new Error('API Key 无效，请在设置中更新');
       if (res.status === 429) throw new Error('请求太频繁，请稍后再试');
-      throw new Error(`API 错误 (${res.status})`);
+      if (res.status === 402) throw new Error('API 余额不足，请充值');
+      throw new Error(detail || `API 错误 (${res.status})`);
     }
 
     const data = await res.json();
     const content = data.choices?.[0]?.message?.content?.trim() || '';
     return extractJSON(content);
+  } catch (err) {
+    if (err.name === 'AbortError') throw new Error('请求超时，请检查网络后重试');
+    throw err;
   } finally {
     clearTimeout(timeout);
   }
@@ -46,8 +52,12 @@ function extractJSON(text) {
 }
 
 export async function analyzeFood(foodDesc, apiKey) {
+  const sanitized = String(foodDesc).replace(/`/g, "'").slice(0, 500);
   const prompt = `你是一个专业营养师。请分析以下食物的营养成分。
-食物描述：${foodDesc}
+食物描述：
+\`\`\`
+${sanitized}
+\`\`\`
 
 请只返回纯 JSON 对象，不包含任何其他文字，格式如下：
 {
@@ -69,6 +79,15 @@ export async function analyzeFood(foodDesc, apiKey) {
 }
 
 export async function generateAdvice(records, settings, apiKey) {
+  if (!records || records.length === 0) {
+    return {
+      summary: '暂无饮食记录，记录更多餐食后可获取个性化建议。',
+      warnings: [],
+      trends: {},
+      aggregated: { total_records: 0, analyzed_days: 0, daily_averages: {}, targets: {} }
+    };
+  }
+
   const days = [...new Set(records.map(r => r.date))];
   const count = days.length || 1;
   const sum = (f) => records.reduce((s, r) => s + (r[f] || 0), 0);
