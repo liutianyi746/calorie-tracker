@@ -27,6 +27,7 @@ export function addRecord(record) {
 }
 
 export function deleteRecord(id) {
+  if (id == null) return;
   saveRecords(getRecords().filter(r => r.id !== id));
 }
 
@@ -89,7 +90,8 @@ export function getSettings() {
 }
 
 export function saveSettings(settings) {
-  localStorage.setItem(KEYS.SETTINGS, JSON.stringify({ ...DEFAULT_SETTINGS, ...settings }));
+  try { localStorage.setItem(KEYS.SETTINGS, JSON.stringify({ ...DEFAULT_SETTINGS, ...settings })); }
+  catch (e) { throw new Error('存储空间不足，无法保存设置'); }
 }
 
 export function getApiKey() {
