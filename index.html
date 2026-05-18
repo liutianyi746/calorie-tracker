@@ -22,11 +22,18 @@
       <div class="tab-content">
         <div id="camera-area" class="camera-area">
           <input type="file" id="camera-input" accept="image/*" capture="environment" hidden>
-          <button id="btn-capture" class="btn-capture">
-            <span class="capture-icon">📷</span>
-            <span>点击拍照</span>
-          </button>
+          <input type="file" id="gallery-input" accept="image/*" hidden>
           <img id="photo-preview" class="photo-preview" style="display:none" alt="食物照片">
+          <div class="capture-buttons">
+            <button id="btn-capture" class="btn-capture">
+              <span class="capture-icon">📷</span>
+              <span>拍照</span>
+            </button>
+            <button id="btn-gallery" class="btn-capture">
+              <span class="capture-icon">🖼</span>
+              <span>相册</span>
+            </button>
+          </div>
         </div>
         <div class="input-group">
           <label for="food-desc">食物描述</label>
