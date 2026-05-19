@@ -9,7 +9,7 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%234cd964%22/><text x=%2250%22 y=%2268%22 text-anchor=%22middle%22 font-size=%2256%22 fill=%22black%22>卡</text></svg>">
   <title>卡路里追踪</title>
-  <link rel="stylesheet" href="css/style.css?v=5">
+  <link rel="stylesheet" href="css/style.css?v=6">
 </head>
 <body>
 
@@ -82,7 +82,7 @@
         <textarea id="food-desc" placeholder="例如：一碗白米饭（150g）+ 宫保鸡丁（约200g）" rows="3"></textarea>
       </div>
       <button id="btn-analyze" class="btn-primary" disabled>
-        <svg width="18" height="18" style="vertical-align:middle;margin-right:6px;margin-top:-2px"><use href="#ic-search"/></svg>分析营养成分
+        <svg width="18" height="18" style="flex-shrink:0"><use href="#ic-search"/></svg>分析营养成分
       </button>
       <div id="result-container" class="result-container" style="display:none"></div>
     </div>
@@ -102,10 +102,10 @@
       <div id="history-list" class="history-list"></div>
       <div class="export-area">
         <button id="btn-export" class="btn-outline">
-          <svg width="16" height="16" style="vertical-align:middle;margin-right:6px;margin-top:-2px"><use href="#ic-download"/></svg>导出数据
+          <svg width="16" height="16" style="flex-shrink:0"><use href="#ic-download"/></svg>导出数据
         </button>
         <button id="btn-import" class="btn-outline" style="margin-top:8px;">
-          <svg width="16" height="16" style="vertical-align:middle;margin-right:6px;margin-top:-2px"><use href="#ic-upload"/></svg>导入数据
+          <svg width="16" height="16" style="flex-shrink:0"><use href="#ic-upload"/></svg>导入数据
         </button>
       </div>
     </div>
@@ -118,7 +118,7 @@
     </div>
     <div class="tab-content">
       <button id="btn-generate-advice" class="btn-primary">
-        <svg width="18" height="18" style="vertical-align:middle;margin-right:6px;margin-top:-2px"><use href="#ic-spark"/></svg>生成最新建议
+        <svg width="18" height="18" style="flex-shrink:0"><use href="#ic-spark"/></svg>生成最新建议
       </button>
       <div id="advice-container" class="advice-container" style="display:none"></div>
     </div>
@@ -183,7 +183,7 @@
   </div>
 </div>
 
-<script src="js/bundle.js?v=5"></script>
+<script src="js/bundle.js?v=6"></script>
 <script>
   if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
 </script>

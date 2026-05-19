@@ -120,7 +120,9 @@ textarea{resize:vertical;line-height:1.5}
   background:var(--green);color:#000;font-size:16px;font-weight:700;
   font-family:inherit;cursor:pointer;min-height:56px;
   transition:all .2s;letter-spacing:-.2px;
+  display:flex;align-items:center;justify-content:center;gap:8px;
 }
+.btn-primary svg{flex-shrink:0}
 .btn-primary:disabled{opacity:.3;cursor:not-allowed}
 .btn-primary:active:not(:disabled){transform:scale(.98);opacity:.85}
 
@@ -128,7 +130,9 @@ textarea{resize:vertical;line-height:1.5}
   width:100%;padding:16px;border:1px solid var(--border);border-radius:var(--radius-sm);
   background:var(--card);color:var(--text);font-size:14px;font-weight:600;
   font-family:inherit;cursor:pointer;min-height:52px;transition:all .2s;
+  display:flex;align-items:center;justify-content:center;gap:8px;
 }
+.btn-outline svg{flex-shrink:0}
 .btn-outline:active{background:var(--elevated)}
 
 .btn-icon{
