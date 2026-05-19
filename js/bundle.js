@@ -325,9 +325,9 @@ function renderResult(data) {
 function buildRingSegments(record, total) {
   const circumference = 2 * Math.PI * 52;
   const segments = [
-    { val: record.protein_g || 0, color: '#f59e0b' },
-    { val: record.fat_g || 0, color: '#ef4444' },
-    { val: record.carbs_g || 0, color: '#3b82f6' }
+    { val: record.protein_g || 0, color: '#d49e3e' },
+    { val: record.fat_g || 0, color: '#b8473a' },
+    { val: record.carbs_g || 0, color: '#6b8fa3' }
   ];
   let offset = 0;
   return segments.map(s => {
@@ -408,7 +408,7 @@ function buildTrendsHTML(agg) {
 
   const rows = items.map(item => {
     const pct = Math.min(100, Math.round((item.avg / item.target) * 100));
-    const color = pct <= 95 ? '#f59e0b' : pct <= 110 ? '#22c55e' : '#ef4444';
+    const color = pct <= 95 ? '#d49e3e' : pct <= 110 ? '#7a9e7e' : '#b8473a';
     const emoji = pct <= 95 ? '⚠' : pct <= 110 ? '✅' : '❌';
     return `<div class="trend-row">
       <div class="trend-info"><span>${item.label}</span><b style="color:${color}">${item.avg} / ${item.target} ${item.unit} ${emoji}</b></div>
