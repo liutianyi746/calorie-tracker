@@ -1,5 +1,7 @@
 import { addRecord, deleteRecord, generateId } from './storage.js';
 
+function S(id,w,h){ w=w||18;h=h||18;return '<svg width="'+w+'" height="'+h+'"><use href="#'+id+'"/></svg>'; }
+
 export function showToast(msg, type) {
   type = type || 'info';
   var t = document.getElementById('toast');
@@ -100,7 +102,7 @@ function rings(rec,total){
   var off=0, h='';
   for(var i=0;i<segs.length;i++){
     var s=segs[i], len=(s.v/total)*circ;
-    h+='<circle cx="60" cy="60" r="52" fill="none" stroke="'+s.c+'" stroke-width="8" stroke-dasharray="'+len+' '+(circ-len)+'" stroke-dashoffset="'+(off==0?0:-off)+'" transform="rotate(-90 60 60)"/>';
+    h+='<circle cx="60" cy="60" r="52" fill="none" stroke="'+s.c+'" stroke-width="8" stroke-dasharray="'+len+' '+(circ-len)+'" stroke-dashoffset="'+(off===0?0:-off)+'" transform="rotate(-90 60 60)"/>';
     off+=len;
   }
   return h;
@@ -109,7 +111,7 @@ function rings(rec,total){
 export function renderHistory(records, dateStr) {
   var c = document.getElementById('history-list');
   if(!records.length){
-    c.innerHTML = '<div class="empty-state"><div class="empty-icon">🍽</div><p>暂无记录</p><p class="empty-hint">去「拍照」添加第一餐吧</p></div>';
+    c.innerHTML = '<div class="empty-state">'+S('ic-plate',48,48)+'<p>暂无记录</p><p class="empty-hint">去「拍照」添加第一餐吧</p></div>';
     return;
   }
   var h = '';
@@ -126,7 +128,7 @@ export function renderHistory(records, dateStr) {
       +'<div>饱脂 <b>'+r.saturated_fat_g+'g</b></div><div>不饱脂 <b>'+r.unsaturated_fat_g+'g</b></div>'
       +'</div>'
       +(r.notes?'<p style="font-size:12px;color:var(--text2);margin-bottom:10px">'+esc(r.notes)+'</p>':'')
-      +'<div class="detail-actions"><button class="btn-small btn-danger" onclick="globalThis.deleteRecordById(\''+r.id+'\')">删除</button></div>'
+      +'<div class="detail-actions"><button class="btn-small btn-danger" onclick="globalThis.deleteRecordById(\''+r.id+'\')">'+S('ic-trash',14,14)+' 删除</button></div>'
       +'</div></div>';
   }
   c.innerHTML = h;
@@ -143,7 +145,8 @@ export function renderAdvice(data) {
   var ww = data.warnings||[];
   for(var i=0;i<ww.length;i++){
     var w=ww[i], lv=w.level||'info';
-    warns+='<div class="advice-card advice-'+lv+'"><div class="advice-card-title">'+ico(lv)+' '+esc(w.title)+'</div><p>'+esc(w.detail)+'</p></div>';
+    var iconId = lv==='warning'?'ic-warning':lv==='good'?'ic-check':'ic-info';
+    warns+='<div class="advice-card advice-'+lv+'"><div class="advice-card-title">'+S(iconId,16,16)+' '+esc(w.title)+'</div><p>'+esc(w.detail)+'</p></div>';
   }
 
   c.innerHTML = (data.summary?'<p class="advice-summary">'+esc(data.summary)+'</p>':'')+trends+warns;
@@ -163,14 +166,12 @@ function buildTrends(agg){
   for(var i=0;i<items.length;i++){
     var it=items[i], pct=Math.min(100,Math.round((it.avg/it.target)*100));
     var color = pct<=95?'#f0a33b':pct<=110?'#4cd964':'#ff5e5b';
-    var em = pct<=95?'⚠':pct<=110?'✓':'✗';
-    rows+='<div class="trend-row"><div class="trend-info"><span>'+it.label+'</span><b style="color:'+color+'">'+it.avg+' / '+it.target+' '+it.unit+' '+em+'</b></div>'
+    var iconId = pct<=95?'ic-warning':pct<=110?'ic-check':'ic-warning';
+    rows+='<div class="trend-row"><div class="trend-info"><span>'+it.label+'</span><b style="color:'+color+'">'+it.avg+' / '+it.target+' '+it.unit+' '+S(iconId,14,14)+'</b></div>'
       +'<div class="trend-bar"><div class="trend-fill" style="width:'+pct+'%;background:'+color+'"></div></div></div>';
   }
   return '<div class="trends-card"><h3>近 7 天趋势</h3>'+rows+'</div>';
 }
-
-function ico(lv){ return lv==='warning'?'⚠':lv==='good'?'✓':'ℹ'; }
 
 function esc(s){
   if(!s) return '';
